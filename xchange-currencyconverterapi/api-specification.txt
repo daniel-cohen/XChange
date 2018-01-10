@@ -1,0 +1,29 @@
+Open Exchange Rates API specification
+================================
+
+Public API
+
+https://free.currencyconverterapi.com/
+
+Latest
+------
+https://free.currencyconverterapi.com/api/v5/convert?q=USD_PHP&compact=y
+
+Currencies
+------
+https://free.currencyconverterapi.com/api/v5/currencies
+
+Counties
+------
+https://free.currencyconverterapi.com/api/v5/countries
+
+
+Data update rate!
+------
+According to https://free.currencyconverterapi.com/
+
+Rate Limits of the Free API
+Conversion Pairs per Request: 2
+Number of Requests per Hour: 100
+Date Range in History: 8 Days
+Allowed Back in History: 1 Year(s)
