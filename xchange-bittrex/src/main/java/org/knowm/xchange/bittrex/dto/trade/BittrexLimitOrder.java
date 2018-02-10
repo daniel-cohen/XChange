@@ -8,36 +8,28 @@ import org.knowm.xchange.dto.trade.LimitOrder;
 
 public class BittrexLimitOrder extends LimitOrder {
 
-  private final BigDecimal pricePerUnit;
 
   public BittrexLimitOrder(OrderType type, BigDecimal originalAmount, CurrencyPair currencyPair, String id, Date timestamp, BigDecimal limitPrice,
-      BigDecimal quantityRemaining, BigDecimal pricePerUnit) {
+      BigDecimal quantityRemaining, BigDecimal pricePerUnit, BigDecimal fee) {
     super(type, originalAmount, quantityRemaining == null ? null : originalAmount.subtract(quantityRemaining), currencyPair, id, timestamp, limitPrice);
+    this.setAveragePrice(pricePerUnit);
 
-    this.pricePerUnit = pricePerUnit;
   }
 
   public BittrexLimitOrder(OrderType type, BigDecimal originalAmount, CurrencyPair currencyPair, String id, Date timestamp, BigDecimal limitPrice,
-      BigDecimal quantityRemaining, BigDecimal pricePerUnit, OrderStatus status) {
+      BigDecimal quantityRemaining, BigDecimal pricePerUnit, BigDecimal fee, OrderStatus status) {
     super(type,
         originalAmount,
         currencyPair,
         id,
         timestamp,
         limitPrice,
-        BigDecimal.ZERO,
+        pricePerUnit,
         quantityRemaining == null ? null : originalAmount.subtract(quantityRemaining),
+        fee,
         status);
 
-    this.pricePerUnit = pricePerUnit;
   }
 
-  /**
-   * The average price obtained for any trades that have filled the order.
-   *
-   * @return
-   */
-  public BigDecimal getPricePerUnit() {
-    return pricePerUnit;
-  }
+
 }

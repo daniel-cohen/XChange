@@ -8,10 +8,7 @@ import java.util.Date;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
-import org.knowm.xchange.dto.trade.LimitOrder;
-import org.knowm.xchange.dto.trade.MarketOrder;
-import org.knowm.xchange.dto.trade.OpenOrders;
-import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.dto.trade.*;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
@@ -76,6 +73,11 @@ public class GeminiTradeService extends GeminiTradeServiceRaw implements TradeSe
     }
 
     return String.valueOf(newOrder.getId());
+  }
+
+  @Override
+  public String placeStopOrder(StopOrder stopOrder) throws IOException {
+    throw new NotYetImplementedForExchangeException();
   }
 
   @Override
@@ -149,7 +151,14 @@ public class GeminiTradeService extends GeminiTradeServiceRaw implements TradeSe
   @Override
   public Collection<Order> getOrder(
       String... orderIds) throws IOException {
-    throw new NotYetImplementedForExchangeException();
+
+    Collection<Order> orders = new ArrayList<>(orderIds.length);
+
+    for (String orderId : orderIds) {
+      orders.add(GeminiAdapters.adaptOrder(super.getGeminiOrderStatus(orderId)));
+    }
+
+    return orders;
   }
 
   public static class GeminiTradeHistoryParams implements TradeHistoryParamCurrencyPair, TradeHistoryParamLimit, TradeHistoryParamsTimeSpan {

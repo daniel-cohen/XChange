@@ -11,10 +11,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.knowm.xchange.bitflyer.dto.BitflyerException;
+import org.knowm.xchange.bitflyer.dto.account.BitflyerBalance;
 import org.knowm.xchange.bitflyer.dto.account.BitflyerMarginAccount;
 import org.knowm.xchange.bitflyer.dto.account.BitflyerMarginStatus;
 import org.knowm.xchange.bitflyer.dto.account.BitflyerMarginTransaction;
 import org.knowm.xchange.bitflyer.dto.account.BitflyerMarket;
+import org.knowm.xchange.bitflyer.dto.marketdata.BitflyerOrderbook;
 import org.knowm.xchange.bitflyer.dto.marketdata.BitflyerTicker;
 import org.knowm.xchange.bitflyer.dto.trade.BitflyerExecution;
 import org.knowm.xchange.bitflyer.dto.trade.BitflyerPosition;
@@ -45,6 +47,17 @@ public interface Bitflyer {
   @Path("getticker")
   BitflyerTicker getTicker(@QueryParam("product_code") String productCode) throws IOException, BitflyerException;
 
+  /**
+   * return "BTC_JPY" or "BTC_USD" for U.S. accounts.
+   */
+  @GET
+  @Path("getboard")
+  BitflyerOrderbook getBoard() throws IOException, BitflyerException;
+
+  @GET
+  @Path("getboard")
+  BitflyerOrderbook getBoard(@QueryParam("product_code") String productCode) throws IOException, BitflyerException;
+
   @GET
   @Path("getexecutions")
   List<BitflyerExecution> getExecutions() throws IOException, BitflyerException;
@@ -63,6 +76,12 @@ public interface Bitflyer {
   @GET
   @Path("me/getcollateral")
   BitflyerMarginStatus getMarginStatus(@HeaderParam(ACCESS_KEY) String apiKey,
+      @HeaderParam(ACCESS_TIMESTAMP) SynchronizedValueFactory<Long> nonce,
+      @HeaderParam(ACCESS_SIGN) ParamsDigest paramsDigest) throws IOException, BitflyerException;
+
+  @GET
+  @Path("/me/getbalance")
+  List<BitflyerBalance> getBalances(@HeaderParam(ACCESS_KEY) String apiKey,
       @HeaderParam(ACCESS_TIMESTAMP) SynchronizedValueFactory<Long> nonce,
       @HeaderParam(ACCESS_SIGN) ParamsDigest paramsDigest) throws IOException, BitflyerException;
 

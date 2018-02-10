@@ -1,16 +1,13 @@
 package org.knowm.xchange.gdax.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.dto.Order;
-import org.knowm.xchange.dto.trade.LimitOrder;
-import org.knowm.xchange.dto.trade.MarketOrder;
-import org.knowm.xchange.dto.trade.OpenOrders;
-import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.dto.trade.*;
 import org.knowm.xchange.exceptions.FundsExceededException;
-import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.gdax.GDAXAdapters;
 import org.knowm.xchange.gdax.dto.trade.GDAXFill;
 import org.knowm.xchange.gdax.dto.trade.GDAXIdResponse;
@@ -62,6 +59,13 @@ public class GDAXTradeService extends GDAXTradeServiceRaw implements TradeServic
   }
 
   @Override
+  public String placeStopOrder(StopOrder stopOrder) throws IOException, FundsExceededException {
+
+    GDAXIdResponse response = placeGDAXStopOrder(stopOrder);
+    return response.getId();
+  }
+
+  @Override
   public boolean cancelOrder(String orderId) throws IOException {
 
     return cancelGDAXOrder(orderId);
@@ -91,6 +95,12 @@ public class GDAXTradeService extends GDAXTradeServiceRaw implements TradeServic
 
   @Override
   public Collection<Order> getOrder(String... orderIds) throws IOException {
-    throw new NotYetImplementedForExchangeException();
+    Collection<Order> orders = new ArrayList<>(orderIds.length);
+
+    for (String orderId : orderIds) {
+      orders.add(GDAXAdapters.adaptOrder(super.getOrder(orderId)));
+    }
+
+    return orders;
   }
 }

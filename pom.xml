@@ -5,7 +5,7 @@
 
     <groupId>org.knowm.xchange</groupId>
     <artifactId>xchange-parent</artifactId>
-    <version>4.3.3-SNAPSHOT</version>
+    <version>4.3.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>XChange</name>
@@ -85,6 +85,7 @@
     </ciManagement>
 
     <modules>
+        <module>xchange-abucoins</module>
         <module>xchange-anx</module>
         <module>xchange-acx</module>
         <module>xchange-binance</module>
@@ -94,6 +95,7 @@
         <module>xchange-bitcoincore</module>
         <module>xchange-bitcoinde</module>
         <module>xchange-bitcoinium</module>
+        <module>xchange-bitcointoyou</module>
         <module>xchange-bitcurex</module>
         <module>xchange-bitfinex</module>
         <module>xchange-bitmex</module>
@@ -102,6 +104,7 @@
         <module>xchange-bitso</module>
         <module>xchange-bitstamp</module>
         <module>xchange-bittrex</module>
+        <module>xchange-bitz</module>
         <module>xchange-bleutrade</module>
         <module>xchange-blockchain</module>
         <module>xchange-btcc</module>
@@ -112,6 +115,7 @@
         <module>xchange-ccex</module>
         <module>xchange-cexio</module>
         <module>xchange-coinbase</module>
+        <module>xchange-coinegg</module>
         <module>xchange-coinmarketcap</module>
         <module>xchange-coinfloor</module>
         <module>xchange-coinmate</module>
@@ -132,6 +136,8 @@
         <module>xchange-koineks</module>
         <module>xchange-koinim</module>
         <module>xchange-kraken</module>
+        <module>xchange-kuna</module>
+        <module>xchange-kucoin</module>
         <module>xchange-lakebtc</module>
         <module>xchange-liqui</module>
         <module>xchange-livecoin</module>

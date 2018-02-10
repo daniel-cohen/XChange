@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.QueryParam;
-
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.exceptions.ExchangeException;
@@ -24,14 +22,20 @@ public class HitbtcAccountServiceRaw extends HitbtcBaseService {
     super(exchange);
   }
 
-  public String withdrawFundsRaw(Currency currency, BigDecimal amount, String address) throws HttpStatusIOException {
-    Map response = hitbtc.payout(amount, currency.getCurrencyCode(), address);
-    //todo: handle "not enough funds" case more gracefully - the service returns a 409 with this body > {"code":"InvalidArgument","message":"Balance not enough"}
-    return response.get("transaction").toString();
+  public String withdrawFundsRaw(Currency currency, BigDecimal amount, String address, String paymentId) throws HttpStatusIOException {
+    Map response = hitbtc.payout(amount, currency.getCurrencyCode(), address, paymentId);
+
+    /*
+     * todo: if there isn't enough money we get a 400 with body:
+     * {"error":{"code":20001,"message":"Insufficient funds","description":"Check that the funds are sufficient, given commissions"}} ...but currently
+     * 400 errors don't reach this code
+     */
+
+    return response.get("id").toString();
   }
 
-  public HitbtcInternalTransferResponse transferFunds(Currency currency, BigDecimal amount, HitbtcTransferType hitbtcTransferType) throws IOException {
-
+  public HitbtcInternalTransferResponse transferFunds(Currency currency, BigDecimal amount,
+      HitbtcTransferType hitbtcTransferType) throws IOException {
     return hitbtc.transferToTrading(amount, currency.getCurrencyCode(), hitbtcTransferType.getType());
   }
 
@@ -62,10 +66,8 @@ public class HitbtcAccountServiceRaw extends HitbtcBaseService {
     return hitbtc.getTradingBalance();
   }
 
-  public String getDepositAddress(String currency) throws IOException {
-
-    HitbtcAddress hitbtcDepositAddress = hitbtc.getHitbtcDepositAddress(currency);
-    return hitbtcDepositAddress.getAddress();
+  public HitbtcAddress getDepositAddress(Currency currency) throws IOException {
+    return hitbtc.getHitbtcDepositAddress(currency.toString());
   }
 
   public List<HitbtcTransaction> getTransactions(String currency, Integer limit, Integer offset) throws HttpStatusIOException {

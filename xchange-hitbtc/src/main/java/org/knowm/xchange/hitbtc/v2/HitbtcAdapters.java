@@ -44,7 +44,7 @@ public class HitbtcAdapters {
   /**
    * known counter currencies at HitBTC
    */
-  private static final Set<String> counters = new HashSet<>(Arrays.asList("USD", "EUR", "BTC", "ETH"));
+  private static final Set<String> counters = new HashSet<>(Arrays.asList("USD", "EUR", "BTC", "ETH", "USDT"));
 
   public static CurrencyPair adaptSymbol(String symbol) {
     String counter = counters.stream().filter(cnt -> symbol.endsWith(cnt)).findAny().orElseThrow(() -> new RuntimeException("Not supported HitBTC symbol: " + symbol));
@@ -151,6 +151,7 @@ public class HitbtcAdapters {
         hitbtcOrder.price,
         null, // exchange does not provide average price
         hitbtcOrder.cumQuantity,
+        null,
         convertOrderStatus(hitbtcOrder.status));
 
     return order;
@@ -227,7 +228,17 @@ public class HitbtcAdapters {
         int priceScale = tickSize.scale();//not 100% sure this is correct
         //also, we need to take into account the quantityIncrement
 
-        CurrencyPairMetaData meta = new CurrencyPairMetaData(symbol.getTakeLiquidityRate(), symbol.getTakeLiquidityRate(), null, priceScale);
+        BigDecimal tradingFee = symbol.getTakeLiquidityRate();
+        BigDecimal minimumAmount = null;
+        BigDecimal maximumAmount = null;
+
+        if(currencyPairs.containsKey(pair)) {
+          CurrencyPairMetaData existing = currencyPairs.get(pair);
+          minimumAmount = existing.getMinimumAmount();
+          maximumAmount = existing.getMaximumAmount();
+        }
+
+        CurrencyPairMetaData meta = new CurrencyPairMetaData(tradingFee, minimumAmount, maximumAmount, priceScale);
 
         currencyPairs.put(pair, meta);
       }

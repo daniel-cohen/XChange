@@ -36,6 +36,7 @@ import org.knowm.xchange.gdax.dto.trade.GDAXSendMoneyResponse;
 import org.knowm.xchange.utils.DateUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import si.mazi.rescu.HttpStatusIOException;
 import si.mazi.rescu.ParamsDigest;
@@ -95,6 +96,13 @@ public interface GDAX {
   @Path("orders")
   @Consumes(MediaType.APPLICATION_JSON)
   GDAXIdResponse placeMarketOrder(GDAXPlaceOrder placeOrder, @HeaderParam("CB-ACCESS-KEY") String apiKey,
+      @HeaderParam("CB-ACCESS-SIGN") ParamsDigest signer, @HeaderParam("CB-ACCESS-TIMESTAMP") SynchronizedValueFactory<Long> nonce,
+      @HeaderParam("CB-ACCESS-PASSPHRASE") String passphrase) throws GDAXException, IOException;
+  
+  @POST
+  @Path("orders")
+  @Consumes(MediaType.APPLICATION_JSON)
+  GDAXIdResponse placeStopOrder(GDAXPlaceOrder placeOrder, @HeaderParam("CB-ACCESS-KEY") String apiKey,
       @HeaderParam("CB-ACCESS-SIGN") ParamsDigest signer, @HeaderParam("CB-ACCESS-TIMESTAMP") SynchronizedValueFactory<Long> nonce,
       @HeaderParam("CB-ACCESS-PASSPHRASE") String passphrase) throws GDAXException, IOException;
 
@@ -164,6 +172,11 @@ public interface GDAX {
       @HeaderParam("CB-ACCESS-PASSPHRASE") String passphrase,
       @PathParam("account_id") String accountId);
 
+  @GET
+  @Path("/users/self/verify")
+  JsonNode getVerifyId(@HeaderParam("CB-ACCESS-KEY") String apiKey, @HeaderParam("CB-ACCESS-SIGN") ParamsDigest signer,
+      @HeaderParam("CB-ACCESS-TIMESTAMP") long timestamp, @HeaderParam("CB-ACCESS-PASSPHRASE") String passphrase) throws GDAXException, IOException;
+  
   class GDAXReportRequest {
     public final @JsonProperty("type") String type;
     public final @JsonProperty("start_date") String startDate;

@@ -13,6 +13,14 @@ import org.knowm.xchange.currency.CurrencyPair;
  */
 public abstract class Order implements Serializable {
 
+  public BigDecimal getFee() {
+    return fee;
+  }
+
+  public void setFee(BigDecimal fee) {
+    this.fee = fee;
+  }
+
   public enum OrderType {
 
     /**
@@ -124,6 +132,9 @@ public abstract class Order implements Serializable {
    */
   private final Date timestamp;
 
+  /** The total of the fees incured for all transactions related to this order */
+  private BigDecimal fee;
+
   /**
    * Any applicable order flags
    */
@@ -156,10 +167,11 @@ public abstract class Order implements Serializable {
    * @param timestamp the absolute time for this order according to the exchange's server, null if not provided
    * @param averagePrice the averagePrice of fill belonging to the order
    * @param cumulativeAmount the amount that has been filled
+   * @param fee the fee associated with this order
    * @param status the status of the order at the exchange
    */
   public Order(OrderType type, BigDecimal originalAmount, CurrencyPair currencyPair, String id, Date timestamp, BigDecimal averagePrice,
-      BigDecimal cumulativeAmount, OrderStatus status) {
+      BigDecimal cumulativeAmount, BigDecimal fee, OrderStatus status) {
 
     this.type = type;
     this.originalAmount = originalAmount;
@@ -168,6 +180,7 @@ public abstract class Order implements Serializable {
     this.timestamp = timestamp;
     this.averagePrice = averagePrice;
     this.cumulativeAmount = cumulativeAmount;
+    this.fee = fee;
     this.status = status;
   }
 
@@ -207,7 +220,8 @@ public abstract class Order implements Serializable {
    * @return The remaining order amount
    */
   public BigDecimal getRemainingAmount() {
-    if (cumulativeAmount != null) {
+    if (cumulativeAmount != null
+            && originalAmount != null) {
       return originalAmount.subtract(cumulativeAmount);
     }
     return originalAmount;
@@ -280,8 +294,12 @@ public abstract class Order implements Serializable {
   @Override
   public String toString() {
 
-    return "Order [type=" + type + ", originalAmount=" + originalAmount + ", cumulativeAmount=" + getCumulativeAmount() + ", averagePrice=" + averagePrice + ", currencyPair=" + currencyPair
+    return "Order [type=" + type + ", originalAmount=" + print(originalAmount) + ", cumulativeAmount=" + print(cumulativeAmount) + ", averagePrice=" + print(averagePrice) + ", currencyPair=" + currencyPair
         + ", id=" + id + ", timestamp=" + timestamp + ", status=" + status + "]";
+  }
+
+  private static String print(BigDecimal value) {
+    return value == null ? null : value.toPlainString();
   }
 
   @Override
@@ -335,6 +353,7 @@ public abstract class Order implements Serializable {
     protected Date timestamp;
     protected BigDecimal averagePrice;
     protected OrderStatus status;
+    protected BigDecimal fee;
 
     protected final Set<IOrderFlags> flags = new HashSet<>();
 
@@ -365,6 +384,12 @@ public abstract class Order implements Serializable {
     public Builder cumulativeAmount(BigDecimal cumulativeAmount) {
 
       this.cumulativeAmount = cumulativeAmount;
+      return this;
+    }
+
+    public Builder fee(BigDecimal fee) {
+
+      this.fee = fee;
       return this;
     }
 

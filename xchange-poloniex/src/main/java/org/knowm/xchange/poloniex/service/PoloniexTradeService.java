@@ -14,11 +14,7 @@ import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
-import org.knowm.xchange.dto.trade.LimitOrder;
-import org.knowm.xchange.dto.trade.MarketOrder;
-import org.knowm.xchange.dto.trade.OpenOrders;
-import org.knowm.xchange.dto.trade.UserTrade;
-import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.dto.trade.*;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
@@ -94,6 +90,11 @@ public class PoloniexTradeService extends PoloniexTradeServiceRaw implements Tra
     }
 
     return response.getOrderNumber().toString();
+  }
+
+  @Override
+  public String placeStopOrder(StopOrder stopOrder) throws IOException {
+    throw new NotYetImplementedForExchangeException();
   }
 
   @Override
@@ -188,6 +189,25 @@ public class PoloniexTradeService extends PoloniexTradeServiceRaw implements Tra
     // for what is not an open order, we need to query one by one.
     // but this returns fills by order, that we need need to calculate the remaining quantity, average fill price, and order type (in adapter).
     throw new NotYetImplementedForExchangeException();
+  }
+
+  public final UserTrades getOrderTrades(Order order) throws IOException {
+    return getOrderTrades(order.getId(), order.getCurrencyPair());
+  }
+
+  public UserTrades getOrderTrades(String orderId, CurrencyPair currencyPair) throws IOException {
+
+    List<UserTrade> trades = new ArrayList<>();
+
+    PoloniexUserTrade[] poloniexUserTrades = returnOrderTrades(orderId);
+    if (poloniexUserTrades != null) {
+      for (PoloniexUserTrade poloniexUserTrade : poloniexUserTrades) {
+        poloniexUserTrade.setOrderNumber(orderId); // returnOrderTrades doesn't fill in orderId
+        trades.add(PoloniexAdapters.adaptPoloniexUserTrade(poloniexUserTrade, currencyPair));
+      }
+    }
+
+    return new UserTrades(trades, TradeSortType.SortByTimestamp);
   }
 
   public static class PoloniexTradeHistoryParams implements TradeHistoryParamCurrencyPair, TradeHistoryParamsTimeSpan {

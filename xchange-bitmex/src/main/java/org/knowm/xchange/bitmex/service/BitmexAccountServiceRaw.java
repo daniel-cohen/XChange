@@ -13,14 +13,18 @@ import org.knowm.xchange.currency.Currency;
 
 public class BitmexAccountServiceRaw extends BitmexBaseService {
 
+  String apiKey = exchange.getExchangeSpecification().getApiKey();
+
   /**
    * Constructor
    *
    * @param exchange
    */
+
   public BitmexAccountServiceRaw(Exchange exchange) {
 
     super(exchange);
+
   }
 
   public BitmexAccount getBitmexAccountInfo() throws IOException {

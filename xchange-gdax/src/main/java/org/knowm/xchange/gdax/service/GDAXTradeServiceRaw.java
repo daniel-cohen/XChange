@@ -7,6 +7,7 @@ import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
+import org.knowm.xchange.dto.trade.StopOrder;
 import org.knowm.xchange.gdax.dto.GDAXException;
 import org.knowm.xchange.gdax.dto.trade.GDAXFill;
 import org.knowm.xchange.gdax.dto.trade.GDAXIdResponse;
@@ -30,7 +31,11 @@ public class GDAXTradeServiceRaw extends GDAXBaseService {
 
   public GDAXOrder[] getGDAXOpenOrders() throws IOException {
 
-    return gdax.getListOrders(apiKey, digest, nonceFactory, passphrase, "open");
+    try {
+      return gdax.getListOrders(apiKey, digest, nonceFactory, passphrase, "open");
+    } catch (GDAXException e) {
+      throw handleError(e);
+    }
   }
 
   public GDAXFill[] getGDAXFills(TradeHistoryParams tradeHistoryParams) throws IOException {
@@ -90,15 +95,38 @@ public class GDAXTradeServiceRaw extends GDAXBaseService {
       throw handleError(e);
     }
   }
+  
+  public GDAXIdResponse placeGDAXStopOrder(StopOrder stopOrder) throws IOException {
 
+    String side = side(stopOrder.getType());
+    String productId = toProductId(stopOrder.getCurrencyPair());
+
+    try {
+      return gdax.placeStopOrder(new GDAXPlaceOrder(stopOrder.getOriginalAmount(), stopOrder.getAveragePrice(), side, productId, "stop", stopOrder.getOrderFlags
+              ()), apiKey, digest,
+          nonceFactory, passphrase);
+    } catch (GDAXException e) {
+      throw handleError(e);
+    }
+  }
+  
   public boolean cancelGDAXOrder(String id) throws IOException {
 
-    gdax.cancelOrder(id, apiKey, digest, nonceFactory, passphrase);
+    try {
+      gdax.cancelOrder(id, apiKey, digest, nonceFactory, passphrase);
+    } catch (GDAXException e) {
+      throw handleError(e);
+    }
     return true;
   }
 
   public GDAXOrder getOrder(String id) throws IOException {
-    return gdax.getOrder(id, apiKey, digest, nonceFactory, passphrase);
+
+    try {
+      return gdax.getOrder(id, apiKey, digest, nonceFactory, passphrase);
+    } catch (GDAXException e) {
+      throw handleError(e);
+    }
   }
 
   private static String side(OrderType type) {
