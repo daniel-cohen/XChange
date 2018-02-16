@@ -35,27 +35,41 @@
   },
   "currencies": {
     "BCH": {
-      "scale": 8
+      "scale": 8,
+      "withdrawal_fee": 0.001
     },
     "BTC": {
-      "scale": 8
+      "scale": 8,
+      "withdrawal_fee": 0.001
     },
     "ETH": {
-      "scale": 8
+      "scale": 8,
+      "withdrawal_fee": 0.001
     },
     "LTC": {
-      "scale": 8
+      "scale": 8,
+      "withdrawal_fee": 0.001
     },
     "XRP": {
-      "scale": 8
+      "scale": 8,
+      "withdrawal_fee": 0.15
     },
     "AUD": {
-      "scale": 2
+      "scale": 2,
+      "withdrawal_fee": 0
     }
   },
   "private_rate_limits": [
     {
-      "calls": 1
+      "calls": 10,
+      "time_span": 10,
+      "time_unit": "seconds"
+    },
+    "public_rate_limits": [
+    {
+      "calls": 25,
+      "time_span": 10,
+      "time_unit": "seconds"
     }
   ],
   "share_rate_limits": true
