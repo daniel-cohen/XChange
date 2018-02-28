@@ -49,6 +49,6 @@ public class BitmexAsset {
   @Override
   public String toString() {
 
-    return "KrakenAssetInfo [altName=" + altName + ", assetClass=" + assetClass + ", scale=" + scale + ", displayScale=" + displayScale + "]";
+    return "BitmexAsset [altName=" + altName + ", assetClass=" + assetClass + ", scale=" + scale + ", displayScale=" + displayScale + "]";
   }
 }

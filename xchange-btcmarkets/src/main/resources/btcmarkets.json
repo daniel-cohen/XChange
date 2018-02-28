@@ -59,15 +59,16 @@
       "withdrawal_fee": 0
     }
   },
+  "public_rate_limits": [
+    {
+      "calls": 25,
+      "time_span": 10,
+      "time_unit": "seconds"
+    }
+  ],  
   "private_rate_limits": [
     {
       "calls": 10,
-      "time_span": 10,
-      "time_unit": "seconds"
-    },
-    "public_rate_limits": [
-    {
-      "calls": 25,
       "time_span": 10,
       "time_unit": "seconds"
     }
