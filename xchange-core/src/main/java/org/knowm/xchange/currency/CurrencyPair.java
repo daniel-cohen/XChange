@@ -98,6 +98,8 @@ public class CurrencyPair implements Comparable<CurrencyPair>, Serializable {
 
   public static final CurrencyPair DCR_BTC = new CurrencyPair(Currency.DCR, Currency.BTC);
 
+  
+  public static final CurrencyPair XRP_AUD = new CurrencyPair(Currency.XRP, Currency.AUD);
   public static final CurrencyPair XRP_BTC = new CurrencyPair(Currency.XRP, Currency.BTC);
   public static final CurrencyPair XRP_EUR = new CurrencyPair(Currency.XRP, Currency.EUR);
   public static final CurrencyPair XRP_USD = new CurrencyPair(Currency.XRP, Currency.USD);
