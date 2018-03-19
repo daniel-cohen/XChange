@@ -34,6 +34,7 @@ public class BTCMarketsMarketDataService extends BTCMarketsMarketDataServiceRaw 
 
   @Override
   public Trades getTrades(CurrencyPair currencyPair, Object... args) throws IOException {
+    //TODO:
     throw new NotYetImplementedForExchangeException();
   }
 }

@@ -97,13 +97,19 @@ public final class OrderBook implements Serializable {
   public void update(OrderBookUpdate orderBookUpdate) {
 
     LimitOrder limitOrder = orderBookUpdate.getLimitOrder();
+    
+    
+    //TODO: maybe look into a sorted hash set this seems 
     List<LimitOrder> limitOrders = getOrders(limitOrder.getType());
     int idx = Collections.binarySearch(limitOrders, limitOrder);
     if (idx >= 0) {
+      
+      //TODO: remove instead of updating ???
       limitOrders.remove(idx);
     } else {
       idx = -idx - 1;
     }
+
 
     if (orderBookUpdate.getTotalVolume().compareTo(BigDecimal.ZERO) != 0) {
       LimitOrder updatedOrder = withAmount(limitOrder, orderBookUpdate.getTotalVolume());

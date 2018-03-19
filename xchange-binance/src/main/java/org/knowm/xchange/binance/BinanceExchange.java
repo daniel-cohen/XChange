@@ -80,8 +80,11 @@ public class BinanceExchange extends BaseExchange {
             Filter[] filters = symbol.getFilters();
             for (Filter filter : filters) {
               if (filter.getFilterType().equals("PRICE_FILTER")) {
+                
+                //TODO: is this not the quotePrecision/baseAssetPrecision ?
                 counterPrecision = numberOfDecimals(filter.getMinPrice());
               } else if (filter.getFilterType().equals("LOT_SIZE")) {
+                //TODO: is this not the quotePrecision/baseAssetPrecision ?
                 basePrecision = numberOfDecimals(filter.getMinQty());
               }
             }
